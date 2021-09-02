@@ -1,22 +1,36 @@
 const loadBooks = async () => {
+    const errorDiv = document.getElementById('error-div');
     const inputField = document.getElementById('input-field');
     const InnerValue = inputField.value;
     inputField.value = '';
 
-    const url = `http://openlibrary.org/search.json?q=${InnerValue}`
-    const res = await fetch(url);
-    const data = await res.json();
-    displayBooks(data.docs.slice(0, 40));
+    if(InnerValue === ''){
+        errorDiv.innerText = 'search field can not be empty'
+    }
+    else{
+        const url = `http://openlibrary.org/search.json?q=${InnerValue}`
+        const res = await fetch(url);
+        const data = await res.json();
+        displayBooks(data.docs.slice(0, 40));
+        if(data.numFound === 0){
+            errorDiv.innerHTML = `<h5>Search result not found</h5>`;
+        }
+        else{
+            errorDiv.innerHTML = ''; 
+        }
+    };
 };
 const displayBooks = books => {
-    // console.log(books.length)
+    const errorDiv = document.getElementById('error-div');
+    
     const booksArea = document.getElementById('books-area');
     const searchArea = document.getElementById('search-result');
     const searchResult = document.createElement('h5');
     searchResult.innerText = `Total search result: ${books.length}`;
     booksArea.textContent = '';
+    searchArea.textContent = '';
+    errorDiv.textContent = '';
     books.forEach(book => {
-        // console.log(book)
         if (book.hasOwnProperty('publisher') === true) {
             const div = document.createElement('div');
             div.classList.add('col')
@@ -37,6 +51,6 @@ const displayBooks = books => {
         }
         else {
 
-        }
+        };
     });
 }
