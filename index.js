@@ -8,7 +8,7 @@ const loadBooks = async () => {
         errorDiv.innerText = 'search field can not be empty'
     }
     else{
-        const url = `http://openlibrary.org/search.json?q=${InnerValue}`
+        const url = `https://openlibrary.org/search.json?q=${InnerValue}`
         const res = await fetch(url);
         const data = await res.json();
         displayBooks(data.docs.slice(0, 40));
